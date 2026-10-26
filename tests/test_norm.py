@@ -16,8 +16,10 @@ from nkilab import ops
 def test_softmax_matches_torch_and_jax(rng, fused, R, D):
     x = (rng.standard_normal((R, D)) * 4).astype(np.float32)
     out = ops.softmax(x, fused=fused)
-    np.testing.assert_allclose(out, torch.softmax(torch.from_numpy(x), -1).numpy(), atol=1e-6)
-    np.testing.assert_allclose(out, np.asarray(jax.nn.softmax(jnp.asarray(x), axis=-1)), atol=1e-6)
+    # fp32 row sums over D terms: allow a few ulps of relative error. The reference
+    # itself varies by ~1e-6 across CPUs (PyTorch picks AVX2 vs AVX-512 kernels).
+    np.testing.assert_allclose(out, torch.softmax(torch.from_numpy(x), -1).numpy(), rtol=1e-5, atol=1e-6)
+    np.testing.assert_allclose(out, np.asarray(jax.nn.softmax(jnp.asarray(x), axis=-1)), rtol=1e-5, atol=1e-6)
 
 
 def test_softmax_is_stable_for_large_logits(rng):
