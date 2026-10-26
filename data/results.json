@@ -1,0 +1,9066 @@
+{
+ "generated_at": "2026-10-26T06:02:17+00:00",
+ "git_sha": "76605f2",
+ "quick": false,
+ "versions": {
+  "python": "3.13.16",
+  "nki": "0.7.0+37713544100.gfede04bb",
+  "torch": "2.14.1+cpu",
+  "jax": "0.12.0.1",
+  "numpy": "2.5.4"
+ },
+ "hardware_model": {
+  "name": "trn2 NeuronCore-v3",
+  "partitions": 128,
+  "sbuf_bytes_per_partition": 229376,
+  "psum_bytes_per_partition": 16384,
+  "psum_banks": 8,
+  "psum_bank_fp32": 512,
+  "pe_clock_hz": 2400000000.0,
+  "pe_rows": 128,
+  "pe_cols": 128,
+  "pe_cols_per_cycle": {
+   "bfloat16": 1.0,
+   "float16": 1.0,
+   "tfloat32": 1.0,
+   "float32": 0.25,
+   "float8_e4m3": 2.0,
+   "float8_e5m2": 2.0,
+   "float8_e4m3fn": 2.0
+  },
+  "vector_clock_hz": 960000000.0,
+  "vector_elems_per_cycle_16b": 512,
+  "vector_elems_per_cycle": 256,
+  "scalar_clock_hz": 1200000000.0,
+  "scalar_elems_per_cycle": 128,
+  "gpsimd_clock_hz": 1200000000.0,
+  "gpsimd_elems_per_cycle": 128,
+  "tensor_fixed_cycles": 64,
+  "vector_fixed_cycles": 100,
+  "scalar_fixed_cycles": 64,
+  "gpsimd_fixed_cycles": 64,
+  "hbm_bytes_per_s": 375000000000.0,
+  "dma_queues": 16,
+  "dma_fixed_s": 6e-07,
+  "peak_flops": {
+   "bfloat16": 78643200000000.0,
+   "float16": 78643200000000.0,
+   "tfloat32": 78643200000000.0,
+   "float32": 19660800000000.0,
+   "float8_e4m3": 157286400000000.0,
+   "float8_e5m2": 157286400000000.0,
+   "float8_e4m3fn": 157286400000000.0
+  }
+ },
+ "matmul": {
+  "shape": [
+   1024,
+   1024,
+   1024
+  ],
+  "variants": [
+   {
+    "kernel": "matmul naive",
+    "instructions": 416,
+    "per_engine": {
+     "DMA": 272,
+     "Tensor": 128,
+     "Vector": 16
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 20971520,
+     "sbuf_to_hbm": 2097152,
+     "other": 0
+    },
+    "hbm_bytes": 23068672,
+    "flops": 2147483648,
+    "modeled_latency_us": 79.35645866666647,
+    "serial_latency_us": 259.2364586666673,
+    "roofline_bound_us": 61.51645866666667,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 93.0909090909091,
+    "modeled_tflops": 27.06123337761853,
+    "pct_of_roofline": 77.51915811296975,
+    "engine_busy_pct": {
+     "DMA": 91.5,
+     "Tensor": 38.7,
+     "Vector": 4.8
+    },
+    "peak_sbuf_bytes_per_partition": 1280,
+    "peak_psum_bytes_per_partition": 2048,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 6291456,
+    "ideal_bound_us": 27.30666666666667,
+    "simulator_wall_s": 0.259,
+    "dtype": "bfloat16",
+    "rel_err_vs_numpy": 0.002949570771306753
+   },
+   {
+    "kernel": "matmul blocked 4x2",
+    "instructions": 184,
+    "per_engine": {
+     "DMA": 40,
+     "Tensor": 128,
+     "Vector": 16
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 6291456,
+     "sbuf_to_hbm": 2097152,
+     "other": 0
+    },
+    "hbm_bytes": 8388608,
+    "flops": 2147483648,
+    "modeled_latency_us": 37.80455733333333,
+    "serial_latency_us": 80.88962133333315,
+    "roofline_bound_us": 27.30666666666667,
+    "roofline_regime": "compute",
+    "arithmetic_intensity": 256.0,
+    "modeled_tflops": 56.80488807381178,
+    "pct_of_roofline": 72.23115040310132,
+    "engine_busy_pct": {
+     "DMA": 53.7,
+     "Tensor": 81.3,
+     "Vector": 10.1
+    },
+    "peak_sbuf_bytes_per_partition": 3072,
+    "peak_psum_bytes_per_partition": 16384,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 6291456,
+    "ideal_bound_us": 27.30666666666667,
+    "simulator_wall_s": 0.18,
+    "dtype": "bfloat16",
+    "rel_err_vs_numpy": 0.002949570771306753
+   }
+  ],
+  "sweep": [
+   {
+    "n": 512,
+    "variant": "naive",
+    "modeled_latency_us": 13.298607999999996,
+    "hbm_bytes": 3145728,
+    "flops": 268435456,
+    "arithmetic_intensity": 85.33333333333333,
+    "modeled_tflops": 20.1852296120015,
+    "ideal_bound_us": 4.194304
+   },
+   {
+    "n": 512,
+    "variant": "blocked",
+    "modeled_latency_us": 6.654651999999998,
+    "hbm_bytes": 1572864,
+    "flops": 268435456,
+    "arithmetic_intensity": 170.66666666666666,
+    "modeled_tflops": 40.33801557166326,
+    "ideal_bound_us": 4.194304
+   },
+   {
+    "n": 1024,
+    "variant": "naive",
+    "modeled_latency_us": 79.35645866666647,
+    "hbm_bytes": 23068672,
+    "flops": 2147483648,
+    "arithmetic_intensity": 93.0909090909091,
+    "modeled_tflops": 27.06123337761853,
+    "ideal_bound_us": 27.30666666666667
+   },
+   {
+    "n": 1024,
+    "variant": "blocked",
+    "modeled_latency_us": 37.80455733333333,
+    "hbm_bytes": 8388608,
+    "flops": 2147483648,
+    "arithmetic_intensity": 256.0,
+    "modeled_tflops": 56.80488807381178,
+    "ideal_bound_us": 27.30666666666667
+   },
+   {
+    "n": 2048,
+    "variant": "naive",
+    "modeled_latency_us": 539.3220480000134,
+    "hbm_bytes": 176160768,
+    "flops": 17179869184,
+    "arithmetic_intensity": 97.52380952380952,
+    "modeled_tflops": 31.854564907384564,
+    "ideal_bound_us": 218.45333333333335
+   },
+   {
+    "n": 2048,
+    "variant": "blocked",
+    "modeled_latency_us": 280.33253333333545,
+    "hbm_bytes": 83886080,
+    "flops": 17179869184,
+    "arithmetic_intensity": 204.8,
+    "modeled_tflops": 61.28389373762733,
+    "ideal_bound_us": 218.45333333333335
+   }
+  ]
+ },
+ "norm": {
+  "shape": [
+   4096,
+   2048
+  ],
+  "variants": [
+   {
+    "kernel": "softmax unfused (3 HBM passes)",
+    "instructions": 448,
+    "per_engine": {
+     "DMA": 288,
+     "Vector": 128,
+     "Scalar": 32
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 67141632,
+     "sbuf_to_hbm": 50364416,
+     "other": 0
+    },
+    "hbm_bytes": 117506048,
+    "flops": 0,
+    "modeled_latency_us": 523.8014293333332,
+    "serial_latency_us": 675.2694613333358,
+    "roofline_bound_us": 313.34946133333335,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 0.0,
+    "modeled_tflops": 0.0,
+    "pct_of_roofline": 59.82218523766688,
+    "engine_busy_pct": {
+     "DMA": 54.4,
+     "Vector": 25.4,
+     "Scalar": 10.8
+    },
+    "peak_sbuf_bytes_per_partition": 16384,
+    "peak_psum_bytes_per_partition": 0,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 33554432,
+    "ideal_bound_us": 89.47848533333334,
+    "simulator_wall_s": 0.384,
+    "dtype": "bfloat16",
+    "max_abs_err_vs_torch": 0.0019473433494567871
+   },
+   {
+    "kernel": "softmax fused",
+    "instructions": 192,
+    "per_engine": {
+     "DMA": 64,
+     "Vector": 96,
+     "Scalar": 32
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 16777216,
+     "sbuf_to_hbm": 16777216,
+     "other": 0
+    },
+    "hbm_bytes": 33554432,
+    "flops": 0,
+    "modeled_latency_us": 223.465152,
+    "serial_latency_us": 245.41515200000077,
+    "roofline_bound_us": 89.47848533333334,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 0.0,
+    "modeled_tflops": 0.0,
+    "pct_of_roofline": 40.04135970754552,
+    "engine_busy_pct": {
+     "DMA": 45.1,
+     "Vector": 27.4,
+     "Scalar": 25.2
+    },
+    "peak_sbuf_bytes_per_partition": 12296,
+    "peak_psum_bytes_per_partition": 0,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 33554432,
+    "ideal_bound_us": 89.47848533333334,
+    "simulator_wall_s": 0.192,
+    "dtype": "bfloat16",
+    "max_abs_err_vs_torch": 0.0019473433494567871
+   },
+   {
+    "kernel": "rmsnorm fused",
+    "instructions": 225,
+    "per_engine": {
+     "DMA": 65,
+     "Scalar": 64,
+     "Vector": 96
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 17301504,
+     "sbuf_to_hbm": 16777216,
+     "other": 0
+    },
+    "hbm_bytes": 34078720,
+    "flops": 0,
+    "modeled_latency_us": 226.59658666666675,
+    "serial_latency_us": 249.14658666666745,
+    "roofline_bound_us": 90.87658666666667,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 0.0,
+    "modeled_tflops": 0.0,
+    "pct_of_roofline": 40.105011290549584,
+    "engine_busy_pct": {
+     "DMA": 45.2,
+     "Scalar": 25.6,
+     "Vector": 27.0
+    },
+    "peak_sbuf_bytes_per_partition": 16388,
+    "peak_psum_bytes_per_partition": 0,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 33558528,
+    "ideal_bound_us": 89.48940800000001,
+    "simulator_wall_s": 0.213,
+    "dtype": "bfloat16"
+   },
+   {
+    "kernel": "swiglu fused",
+    "instructions": 160,
+    "per_engine": {
+     "DMA": 96,
+     "Scalar": 32,
+     "Vector": 32
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 33554432,
+     "sbuf_to_hbm": 16777216,
+     "other": 0
+    },
+    "hbm_bytes": 50331648,
+    "flops": 0,
+    "modeled_latency_us": 185.99848533333315,
+    "serial_latency_us": 268.53772800000075,
+    "roofline_bound_us": 134.217728,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 0.0,
+    "modeled_tflops": 0.0,
+    "pct_of_roofline": 72.16065644806979,
+    "engine_busy_pct": {
+     "DMA": 62.1,
+     "Scalar": 30.3,
+     "Vector": 11.0
+    },
+    "peak_sbuf_bytes_per_partition": 16384,
+    "peak_psum_bytes_per_partition": 0,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 50331648,
+    "ideal_bound_us": 134.217728,
+    "simulator_wall_s": 0.25,
+    "dtype": "bfloat16"
+   }
+  ]
+ },
+ "attention": {
+  "shape": [
+   8,
+   2048,
+   128
+  ],
+  "ladder": [
+   {
+    "kernel": "naive (scores in HBM)",
+    "instructions": 21632,
+    "per_engine": {
+     "DMA": 8704,
+     "Tensor": 6144,
+     "Vector": 4608,
+     "GpSimd": 2048,
+     "Scalar": 128
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 339738624,
+     "sbuf_to_hbm": 205520896,
+     "other": 0
+    },
+    "hbm_bytes": 545259520,
+    "flops": 17179869184,
+    "modeled_latency_us": 4424.90958933289,
+    "serial_latency_us": 8614.838720000718,
+    "roofline_bound_us": 1454.0253866666667,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 31.50769230769231,
+    "modeled_tflops": 3.8825356399180304,
+    "pct_of_roofline": 32.86000216076458,
+    "engine_busy_pct": {
+     "DMA": 59.0,
+     "Tensor": 11.1,
+     "Vector": 20.2,
+     "GpSimd": 7.4,
+     "Scalar": 5.1
+    },
+    "peak_sbuf_bytes_per_partition": 16392,
+    "peak_psum_bytes_per_partition": 768,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 16777216,
+    "ideal_bound_us": 218.45333333333335,
+    "simulator_wall_s": 6.038,
+    "dtype": "bfloat16",
+    "useful_causal_flops": 9126805504,
+    "rel_err_vs_torch": 0.003730540396645665
+   },
+   {
+    "kernel": "flash (online softmax, causal skip)",
+    "instructions": 19648,
+    "per_engine": {
+     "DMA": 2432,
+     "Vector": 11648,
+     "Tensor": 3264,
+     "GpSimd": 128,
+     "Scalar": 2176
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 75497472,
+     "sbuf_to_hbm": 4194304,
+     "other": 0
+    },
+    "hbm_bytes": 79691776,
+    "flops": 9126805504,
+    "modeled_latency_us": 1818.1544319998936,
+    "serial_latency_us": 3678.458069333014,
+    "roofline_bound_us": 212.51140266666667,
+    "roofline_regime": "memory",
+    "arithmetic_intensity": 114.52631578947368,
+    "modeled_tflops": 5.019818637716543,
+    "pct_of_roofline": 11.68830320056548,
+    "engine_busy_pct": {
+     "DMA": 91.1,
+     "Vector": 82.1,
+     "Tensor": 14.4,
+     "GpSimd": 1.1,
+     "Scalar": 12.8
+    },
+    "peak_sbuf_bytes_per_partition": 1800,
+    "peak_psum_bytes_per_partition": 512,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 16777216,
+    "ideal_bound_us": 116.05333333333333,
+    "simulator_wall_s": 3.716,
+    "dtype": "bfloat16",
+    "useful_causal_flops": 9126805504,
+    "rel_err_vs_torch": 0.0026343988720327616
+   },
+   {
+    "kernel": "+ K/V resident in SBUF",
+    "instructions": 17488,
+    "per_engine": {
+     "DMA": 272,
+     "Vector": 11648,
+     "Tensor": 3264,
+     "GpSimd": 128,
+     "Scalar": 2176
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 12582912,
+     "sbuf_to_hbm": 4194304,
+     "other": 0
+    },
+    "hbm_bytes": 16777216,
+    "flops": 9126805504,
+    "modeled_latency_us": 1829.339242666557,
+    "serial_latency_us": 2214.685909333064,
+    "roofline_bound_us": 116.05333333333333,
+    "roofline_regime": "compute",
+    "arithmetic_intensity": 544.0,
+    "modeled_tflops": 4.989126833957932,
+    "pct_of_roofline": 6.344002830451878,
+    "engine_busy_pct": {
+     "DMA": 51.2,
+     "Vector": 81.6,
+     "Tensor": 14.3,
+     "GpSimd": 1.1,
+     "Scalar": 12.7
+    },
+    "peak_sbuf_bytes_per_partition": 9736,
+    "peak_psum_bytes_per_partition": 512,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 16777216,
+    "ideal_bound_us": 116.05333333333333,
+    "simulator_wall_s": 3.598,
+    "dtype": "bfloat16",
+    "useful_causal_flops": 9126805504,
+    "rel_err_vs_torch": 0.0026343988720327616
+   },
+   {
+    "kernel": "+ fused, engine-balanced updates",
+    "instructions": 12048,
+    "per_engine": {
+     "DMA": 272,
+     "Vector": 4992,
+     "Tensor": 3264,
+     "Scalar": 3392,
+     "GpSimd": 128
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 12582912,
+     "sbuf_to_hbm": 4194304,
+     "other": 0
+    },
+    "hbm_bytes": 16777216,
+    "flops": 9126805504,
+    "modeled_latency_us": 1201.3125759999314,
+    "serial_latency_us": 1596.3125759998056,
+    "roofline_bound_us": 116.05333333333333,
+    "roofline_regime": "compute",
+    "arithmetic_intensity": 544.0,
+    "modeled_tflops": 7.5973611584005605,
+    "pct_of_roofline": 9.660544278972068,
+    "engine_busy_pct": {
+     "DMA": 51.4,
+     "Vector": 56.5,
+     "Tensor": 21.7,
+     "Scalar": 35.6,
+     "GpSimd": 1.7
+    },
+    "peak_sbuf_bytes_per_partition": 9736,
+    "peak_psum_bytes_per_partition": 512,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 16777216,
+    "ideal_bound_us": 116.05333333333333,
+    "simulator_wall_s": 2.99,
+    "dtype": "bfloat16",
+    "useful_causal_flops": 9126805504,
+    "rel_err_vs_torch": 0.0026343988720327616
+   },
+   {
+    "kernel": "+ 2 query tiles interleaved (ILP)",
+    "instructions": 12048,
+    "per_engine": {
+     "DMA": 272,
+     "Vector": 4992,
+     "Tensor": 3264,
+     "Scalar": 3392,
+     "GpSimd": 128
+    },
+    "dma_bytes": {
+     "hbm_to_sbuf": 12582912,
+     "sbuf_to_hbm": 4194304,
+     "other": 0
+    },
+    "hbm_bytes": 16777216,
+    "flops": 9126805504,
+    "modeled_latency_us": 1146.6077653332693,
+    "serial_latency_us": 1596.3125759998056,
+    "roofline_bound_us": 116.05333333333333,
+    "roofline_regime": "compute",
+    "arithmetic_intensity": 544.0,
+    "modeled_tflops": 7.959832280873514,
+    "pct_of_roofline": 10.121450145560601,
+    "engine_busy_pct": {
+     "DMA": 47.8,
+     "Vector": 59.2,
+     "Tensor": 22.8,
+     "Scalar": 37.3,
+     "GpSimd": 1.8
+    },
+    "peak_sbuf_bytes_per_partition": 10512,
+    "peak_psum_bytes_per_partition": 512,
+    "sbuf_capacity_ok": true,
+    "psum_capacity_ok": true,
+    "compulsory_hbm_bytes": 16777216,
+    "ideal_bound_us": 116.05333333333333,
+    "simulator_wall_s": 2.977,
+    "dtype": "bfloat16",
+    "useful_causal_flops": 9126805504,
+    "rel_err_vs_torch": 0.0026343988720327616
+   }
+  ],
+  "scaling": [
+   {
+    "S": 512,
+    "variant": "naive",
+    "hbm_bytes": 4456448,
+    "modeled_latency_us": 41.873850666666684
+   },
+   {
+    "S": 512,
+    "variant": "flash",
+    "hbm_bytes": 524288,
+    "modeled_latency_us": 14.248367666666663
+   },
+   {
+    "S": 1024,
+    "variant": "naive",
+    "hbm_bytes": 17301504,
+    "modeled_latency_us": 147.20491733333438
+   },
+   {
+    "S": 1024,
+    "variant": "flash",
+    "hbm_bytes": 1048576,
+    "modeled_latency_us": 42.62756866666657
+   },
+   {
+    "S": 2048,
+    "variant": "naive",
+    "hbm_bytes": 68157440,
+    "modeled_latency_us": 553.638698666669
+   },
+   {
+    "S": 2048,
+    "variant": "flash",
+    "hbm_bytes": 2097152,
+    "modeled_latency_us": 143.85097066666665
+   },
+   {
+    "S": 4096,
+    "variant": "naive",
+    "hbm_bytes": 270532608,
+    "modeled_latency_us": 2149.5928533333017
+   },
+   {
+    "S": 4096,
+    "variant": "flash",
+    "hbm_bytes": 4194304,
+    "modeled_latency_us": 524.1577746666835
+   }
+  ]
+ },
+ "decoder_block": {
+  "config": {
+   "d_model": 256,
+   "n_heads": 4,
+   "d_ff": 1024,
+   "eps": 1e-06
+  },
+  "seq_len": 512,
+  "dtype": "float32",
+  "max_abs_err_vs_pytorch": 4.76837158203125e-07,
+  "max_abs_ref": 4.401503086090088,
+  "total_instructions": 802,
+  "parts": [
+   {
+    "op": "rmsnorm",
+    "modeled_latency_us": 9.329061333333334,
+    "hbm_bytes": 1179648,
+    "instructions": 29,
+    "flops": 0
+   },
+   {
+    "op": "qkv matmul",
+    "modeled_latency_us": 19.14608666666667,
+    "hbm_bytes": 3670016,
+    "instructions": 32,
+    "flops": 268435456
+   },
+   {
+    "op": "flash attention",
+    "modeled_latency_us": 68.04347066666654,
+    "hbm_bytes": 2097152,
+    "instructions": 552,
+    "flops": 167772160
+   },
+   {
+    "op": "out-proj matmul",
+    "modeled_latency_us": 10.707985333333331,
+    "hbm_bytes": 2097152,
+    "instructions": 20,
+    "flops": 134217728
+   },
+   {
+    "op": "rmsnorm",
+    "modeled_latency_us": 9.329061333333334,
+    "hbm_bytes": 1179648,
+    "instructions": 29,
+    "flops": 0
+   },
+   {
+    "op": "gate + up matmuls",
+    "modeled_latency_us": 37.692173333333315,
+    "hbm_bytes": 7340032,
+    "instructions": 64,
+    "flops": 536870912
+   },
+   {
+    "op": "swiglu",
+    "modeled_latency_us": 22.327215999999996,
+    "hbm_bytes": 6291456,
+    "instructions": 20,
+    "flops": 0
+   },
+   {
+    "op": "down-proj matmul",
+    "modeled_latency_us": 31.82798533333331,
+    "hbm_bytes": 5242880,
+    "instructions": 56,
+    "flops": 536870912
+   }
+  ]
+ },
+ "correctness": [
+  {
+   "op": "softmax fused",
+   "shape": "300x777",
+   "vs_torch": 2.980232238769531e-07,
+   "vs_jax": 2.384185791015625e-07
+  },
+  {
+   "op": "attention naive",
+   "shape": "2x200x64",
+   "vs_torch": 5.364418029785156e-07,
+   "vs_jax": 2.384185791015625e-07
+  },
+  {
+   "op": "attention flash",
+   "shape": "2x200x64",
+   "vs_torch": 2.384185791015625e-07,
+   "vs_jax": 5.364418029785156e-07
+  },
+  {
+   "op": "attention flash_kv_resident",
+   "shape": "2x200x64",
+   "vs_torch": 2.384185791015625e-07,
+   "vs_jax": 5.364418029785156e-07
+  },
+  {
+   "op": "attention flash_balanced",
+   "shape": "2x200x64",
+   "vs_torch": 2.384185791015625e-07,
+   "vs_jax": 5.364418029785156e-07
+  },
+  {
+   "op": "attention flash_pipelined",
+   "shape": "2x200x64",
+   "vs_torch": 2.384185791015625e-07,
+   "vs_jax": 5.364418029785156e-07
+  },
+  {
+   "op": "matmul blocked",
+   "shape": "200x300 @ 300x130",
+   "vs_torch": 2.288818359375e-05,
+   "vs_jax": 2.288818359375e-05
+  }
+ ],
+ "traces": {
+  "attention naive": {
+   "shape": "H=1 S=512 d=128 bf16",
+   "latency_us": 41.873850666666684,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.6874,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 0.7748,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 0.7748,
+     "t1": 0.8548,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 0.8548,
+     "t1": 1.0256,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 1.0256,
+     "t1": 1.1856,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 1.1856,
+     "t1": 1.9604,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 0.0,
+     "t1": 2.0477,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.0477,
+     "t1": 2.1277,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.1277,
+     "t1": 2.2986,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 2.2986,
+     "t1": 2.4586,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 2.4586,
+     "t1": 3.2333,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 0.0,
+     "t1": 3.3207,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.3207,
+     "t1": 3.4007,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 3.4007,
+     "t1": 3.5716,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 3.5716,
+     "t1": 3.7316,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 3.7316,
+     "t1": 4.5063,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 0.0,
+     "t1": 4.5937,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.5937,
+     "t1": 4.6737,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.6737,
+     "t1": 4.8445,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 4.8445,
+     "t1": 5.0045,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 5.0045,
+     "t1": 5.7793,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 0.0,
+     "t1": 5.8667,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 0.0,
+     "t1": 5.9541,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.9541,
+     "t1": 6.0341,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.0341,
+     "t1": 6.2049,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 6.2049,
+     "t1": 6.3649,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 6.3649,
+     "t1": 7.1396,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 0.0,
+     "t1": 7.227,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.227,
+     "t1": 7.307,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.307,
+     "t1": 7.4779,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 7.4779,
+     "t1": 7.6379,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 7.6379,
+     "t1": 8.4126,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 0.0,
+     "t1": 8.5,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.5,
+     "t1": 8.58,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.58,
+     "t1": 8.7508,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 8.7508,
+     "t1": 8.9108,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 8.9108,
+     "t1": 9.6856,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.6874,
+     "t1": 9.773,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.773,
+     "t1": 9.853,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.853,
+     "t1": 10.0238,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 10.0238,
+     "t1": 10.1838,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 10.1838,
+     "t1": 10.9586,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 1.9604,
+     "t1": 11.046,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 2.0477,
+     "t1": 11.1333,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.1333,
+     "t1": 11.2133,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.2133,
+     "t1": 11.3842,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 11.3842,
+     "t1": 11.5442,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 11.5442,
+     "t1": 12.3189,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 3.3207,
+     "t1": 12.4063,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 12.4063,
+     "t1": 12.4863,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.4863,
+     "t1": 12.6572,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 12.6572,
+     "t1": 12.8172,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 12.8172,
+     "t1": 13.5919,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 4.5937,
+     "t1": 13.6793,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 13.6793,
+     "t1": 13.7593,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.7593,
+     "t1": 13.9301,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 13.9301,
+     "t1": 14.0901,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 14.0901,
+     "t1": 14.8649,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 5.8667,
+     "t1": 14.9523,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 14.9523,
+     "t1": 15.0323,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 15.0323,
+     "t1": 15.2031,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 15.2031,
+     "t1": 15.3631,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 15.3631,
+     "t1": 16.1379,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 7.1396,
+     "t1": 16.2253,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 7.227,
+     "t1": 16.3126,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 16.3126,
+     "t1": 16.3926,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 16.3926,
+     "t1": 16.5635,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 16.5635,
+     "t1": 16.7235,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 16.7235,
+     "t1": 17.4982,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 8.5,
+     "t1": 17.5856,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 17.5856,
+     "t1": 17.6656,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 17.6656,
+     "t1": 17.8364,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 17.8364,
+     "t1": 17.9964,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 17.9964,
+     "t1": 18.7712,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 9.773,
+     "t1": 18.8586,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 18.8586,
+     "t1": 18.9386,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 18.9386,
+     "t1": 19.1094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 19.1094,
+     "t1": 19.2694,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 19.2694,
+     "t1": 20.0442,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 11.046,
+     "t1": 20.1316,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 20.1316,
+     "t1": 20.2116,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 20.2116,
+     "t1": 20.3824,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 20.3824,
+     "t1": 20.5424,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 20.5424,
+     "t1": 21.3172,
+     "bytes": 65536,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 21.3172,
+     "t1": 22.6162,
+     "bytes": 262144,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 22.6162,
+     "t1": 22.987,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 22.987,
+     "t1": 23.467,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 22.987,
+     "t1": 23.0917,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 23.467,
+     "t1": 23.7045,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 23.7045,
+     "t1": 24.6541,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 21.3172,
+     "t1": 25.3531,
+     "bytes": 262144,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 25.3531,
+     "t1": 25.724,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 25.724,
+     "t1": 26.204,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 25.724,
+     "t1": 25.8286,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 26.204,
+     "t1": 26.4415,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 26.4415,
+     "t1": 27.391,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 21.3172,
+     "t1": 28.09,
+     "bytes": 262144,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 28.09,
+     "t1": 28.4609,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 28.4609,
+     "t1": 28.9409,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 28.4609,
+     "t1": 28.5656,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 28.9409,
+     "t1": 29.1784,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 29.1784,
+     "t1": 30.1279,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 21.3172,
+     "t1": 30.8269,
+     "bytes": 262144,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 30.8269,
+     "t1": 31.1978,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 31.1978,
+     "t1": 31.6778,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 31.1978,
+     "t1": 31.3025,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 31.6778,
+     "t1": 31.9153,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 31.9153,
+     "t1": 32.8648,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 32.8648,
+     "t1": 33.5522,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 33.5522,
+     "t1": 33.6322,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 33.6322,
+     "t1": 33.7697,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 17.4982,
+     "t1": 33.6396,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 33.7697,
+     "t1": 33.8497,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 32.8648,
+     "t1": 33.7269,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 33.8497,
+     "t1": 33.9297,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 33.9297,
+     "t1": 34.0672,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 18.7712,
+     "t1": 33.8143,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 34.0672,
+     "t1": 34.1472,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 32.8648,
+     "t1": 33.9017,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 34.1472,
+     "t1": 34.2272,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 34.2272,
+     "t1": 34.3647,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 20.0442,
+     "t1": 33.9891,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 34.3647,
+     "t1": 34.4447,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 32.8648,
+     "t1": 34.0765,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 34.4447,
+     "t1": 34.5247,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 34.5247,
+     "t1": 34.6622,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 21.3172,
+     "t1": 34.1639,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 34.6622,
+     "t1": 34.7422,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 34.7422,
+     "t1": 34.8797,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 34.8797,
+     "t1": 35.5671,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 32.8648,
+     "t1": 35.6544,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 35.6544,
+     "t1": 35.7344,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 35.7344,
+     "t1": 35.8719,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 25.3531,
+     "t1": 35.7418,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 35.8719,
+     "t1": 35.9519,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 32.8648,
+     "t1": 35.8292,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 35.9519,
+     "t1": 36.0319,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 36.0319,
+     "t1": 36.1694,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 28.09,
+     "t1": 35.9166,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 36.1694,
+     "t1": 36.2494,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 32.8648,
+     "t1": 36.004,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 36.2494,
+     "t1": 36.3294,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 36.3294,
+     "t1": 36.4669,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 30.8269,
+     "t1": 36.0914,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 36.4669,
+     "t1": 36.5469,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 32.8648,
+     "t1": 36.1787,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 36.5469,
+     "t1": 36.6269,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 36.6269,
+     "t1": 36.7644,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 33.5522,
+     "t1": 36.2661,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 36.7644,
+     "t1": 36.8444,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 36.8444,
+     "t1": 36.9819,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 36.9819,
+     "t1": 37.6693,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 33.7269,
+     "t1": 37.7567,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 37.7567,
+     "t1": 37.8367,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 37.8367,
+     "t1": 37.9742,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 33.8143,
+     "t1": 37.8441,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 37.9742,
+     "t1": 38.0542,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 33.9017,
+     "t1": 37.9315,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 38.0542,
+     "t1": 38.1342,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 38.1342,
+     "t1": 38.2717,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 33.9891,
+     "t1": 38.0189,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 38.2717,
+     "t1": 38.3517,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 34.0765,
+     "t1": 38.1062,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 38.3517,
+     "t1": 38.4317,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 38.4317,
+     "t1": 38.5692,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 34.1639,
+     "t1": 38.1936,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 38.5692,
+     "t1": 38.6492,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 35.5671,
+     "t1": 38.281,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 38.6492,
+     "t1": 38.7292,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 38.7292,
+     "t1": 38.8667,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 35.6544,
+     "t1": 38.3684,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 38.8667,
+     "t1": 38.9467,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 38.9467,
+     "t1": 39.0842,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 39.0842,
+     "t1": 39.7716,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 35.8292,
+     "t1": 39.859,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 39.859,
+     "t1": 39.939,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 39.939,
+     "t1": 40.0765,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 35.9166,
+     "t1": 39.9464,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 40.0765,
+     "t1": 40.1565,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 36.004,
+     "t1": 40.0337,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 40.1565,
+     "t1": 40.2365,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 40.2365,
+     "t1": 40.374,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 36.0914,
+     "t1": 40.1211,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 40.374,
+     "t1": 40.454,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 36.1787,
+     "t1": 40.2085,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 40.454,
+     "t1": 40.534,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 40.534,
+     "t1": 40.6715,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 36.2661,
+     "t1": 40.2959,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 40.6715,
+     "t1": 40.7515,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 37.6693,
+     "t1": 40.3833,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 40.7515,
+     "t1": 40.8315,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 40.8315,
+     "t1": 40.969,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 37.7567,
+     "t1": 40.4706,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 40.969,
+     "t1": 41.049,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 41.049,
+     "t1": 41.1865,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 41.1865,
+     "t1": 41.8739,
+     "bytes": 32768,
+     "flops": 0
+    }
+   ]
+  },
+  "attention flash": {
+   "shape": "H=1 S=512 d=128 bf16",
+   "latency_us": 21.583575999999994,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.6874,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.0,
+     "t1": 0.1047,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.1047,
+     "t1": 0.2094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.2094,
+     "t1": 0.3802,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 0.7748,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 0.8621,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 0.7748,
+     "t1": 0.8548,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 0.8548,
+     "t1": 1.0256,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 1.0256,
+     "t1": 1.1856,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 1.1856,
+     "t1": 1.3564,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 1.3564,
+     "t1": 1.4611,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 1.4611,
+     "t1": 1.5658,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 1.5658,
+     "t1": 1.6705,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 1.6705,
+     "t1": 1.8305,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 1.8305,
+     "t1": 1.8847,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 1.8847,
+     "t1": 1.9893,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 1.9893,
+     "t1": 2.094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 2.094,
+     "t1": 2.1987,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 1.8305,
+     "t1": 1.9105,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 2.1987,
+     "t1": 2.3362,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.3362,
+     "t1": 2.4162,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.3362,
+     "t1": 2.5071,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 2.5071,
+     "t1": 2.6779,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 2.6779,
+     "t1": 2.7826,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.7826,
+     "t1": 2.9201,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 2.9201,
+     "t1": 3.6075,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 3.6948,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 2.9201,
+     "t1": 3.0248,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.0248,
+     "t1": 3.1295,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.1295,
+     "t1": 3.3003,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 0.0,
+     "t1": 3.7822,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 3.8696,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.7822,
+     "t1": 3.8622,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 3.8622,
+     "t1": 4.0331,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.0331,
+     "t1": 4.1377,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 4.1377,
+     "t1": 4.2424,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.2424,
+     "t1": 4.3471,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.3471,
+     "t1": 4.5071,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.5071,
+     "t1": 4.5613,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 4.5613,
+     "t1": 4.666,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 4.666,
+     "t1": 4.7707,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 4.7707,
+     "t1": 4.8753,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 4.5071,
+     "t1": 4.5871,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 4.8753,
+     "t1": 5.0128,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.0128,
+     "t1": 5.0928,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.0128,
+     "t1": 5.1837,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 5.1837,
+     "t1": 5.3545,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 0.0,
+     "t1": 3.957,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 0.0,
+     "t1": 4.0444,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.0928,
+     "t1": 5.1728,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 5.3545,
+     "t1": 5.5253,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 5.5253,
+     "t1": 5.6853,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 5.6853,
+     "t1": 5.8562,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.8562,
+     "t1": 5.9609,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 5.9609,
+     "t1": 6.0656,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.0656,
+     "t1": 6.1702,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 6.1702,
+     "t1": 6.3302,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 6.3302,
+     "t1": 6.3844,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 6.3844,
+     "t1": 6.4891,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 6.4891,
+     "t1": 6.5938,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 6.5938,
+     "t1": 6.6985,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 6.3302,
+     "t1": 6.4102,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 6.6985,
+     "t1": 6.836,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 6.836,
+     "t1": 6.916,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.836,
+     "t1": 7.0068,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 7.0068,
+     "t1": 7.1776,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 7.1776,
+     "t1": 7.2823,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.2823,
+     "t1": 7.4198,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 7.4198,
+     "t1": 8.1072,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 0.0,
+     "t1": 8.1946,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 7.4198,
+     "t1": 7.5245,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 7.5245,
+     "t1": 7.6292,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 7.6292,
+     "t1": 7.8,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 0.0,
+     "t1": 8.282,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 0.0,
+     "t1": 8.3693,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.282,
+     "t1": 8.362,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 8.362,
+     "t1": 8.5328,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.5328,
+     "t1": 8.6375,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 8.6375,
+     "t1": 8.7422,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.7422,
+     "t1": 8.8469,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 8.8469,
+     "t1": 9.0069,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.0069,
+     "t1": 9.061,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.061,
+     "t1": 9.1657,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.1657,
+     "t1": 9.2704,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 9.2704,
+     "t1": 9.3751,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 9.0069,
+     "t1": 9.0869,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 9.3751,
+     "t1": 9.5126,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.5126,
+     "t1": 9.5926,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.5126,
+     "t1": 9.6834,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.6834,
+     "t1": 9.8543,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 0.0,
+     "t1": 8.4567,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 0.0,
+     "t1": 8.5441,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.5926,
+     "t1": 9.6726,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 9.8543,
+     "t1": 10.0251,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.0251,
+     "t1": 10.1298,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.1298,
+     "t1": 10.2345,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.2345,
+     "t1": 10.3392,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.3392,
+     "t1": 10.4992,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.4992,
+     "t1": 10.5533,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.5533,
+     "t1": 10.658,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.658,
+     "t1": 10.7627,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 10.7627,
+     "t1": 10.8674,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 10.4992,
+     "t1": 10.5792,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 10.8674,
+     "t1": 11.0049,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.0049,
+     "t1": 11.0849,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.0049,
+     "t1": 11.1757,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 11.1757,
+     "t1": 11.3466,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 0.0,
+     "t1": 8.6315,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.6874,
+     "t1": 8.7189,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.0849,
+     "t1": 11.1649,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 11.3466,
+     "t1": 11.5174,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 11.5174,
+     "t1": 11.6774,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 11.6774,
+     "t1": 11.8482,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.8482,
+     "t1": 11.9529,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 11.9529,
+     "t1": 12.0576,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.0576,
+     "t1": 12.1623,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.1623,
+     "t1": 12.3223,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.3223,
+     "t1": 12.3764,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.3764,
+     "t1": 12.4811,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.4811,
+     "t1": 12.5858,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 12.5858,
+     "t1": 12.6905,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 12.3223,
+     "t1": 12.4023,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 12.6905,
+     "t1": 12.828,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 12.828,
+     "t1": 12.908,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.828,
+     "t1": 12.9988,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.9988,
+     "t1": 13.1697,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 13.1697,
+     "t1": 13.2744,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.2744,
+     "t1": 13.4119,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 13.4119,
+     "t1": 14.0992,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.8621,
+     "t1": 14.1866,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 13.4119,
+     "t1": 13.5166,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 13.5166,
+     "t1": 13.6212,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 13.6212,
+     "t1": 13.7921,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 3.6075,
+     "t1": 14.274,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 3.6948,
+     "t1": 14.3614,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 14.274,
+     "t1": 14.354,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 14.354,
+     "t1": 14.5248,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 14.5248,
+     "t1": 14.6295,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 14.6295,
+     "t1": 14.7342,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 14.7342,
+     "t1": 14.8389,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 14.8389,
+     "t1": 14.9989,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 14.9989,
+     "t1": 15.0531,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 15.0531,
+     "t1": 15.1578,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 15.1578,
+     "t1": 15.2624,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 15.2624,
+     "t1": 15.3671,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 14.9989,
+     "t1": 15.0789,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 15.3671,
+     "t1": 15.5046,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 15.5046,
+     "t1": 15.5846,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 15.5046,
+     "t1": 15.6755,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 15.6755,
+     "t1": 15.8463,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 3.7822,
+     "t1": 14.4488,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 3.8696,
+     "t1": 14.5362,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 15.5846,
+     "t1": 15.6646,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 15.8463,
+     "t1": 16.0171,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 16.0171,
+     "t1": 16.1218,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.1218,
+     "t1": 16.2265,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 16.2265,
+     "t1": 16.3312,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 16.3312,
+     "t1": 16.4912,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 16.4912,
+     "t1": 16.5454,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.5454,
+     "t1": 16.65,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.65,
+     "t1": 16.7547,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 16.7547,
+     "t1": 16.8594,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 16.4912,
+     "t1": 16.5712,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 16.8594,
+     "t1": 16.9969,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 16.9969,
+     "t1": 17.0769,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 16.9969,
+     "t1": 17.1678,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 17.1678,
+     "t1": 17.3386,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 3.957,
+     "t1": 14.6235,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 4.0444,
+     "t1": 14.7109,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 17.0769,
+     "t1": 17.1569,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 17.3386,
+     "t1": 17.5094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 17.5094,
+     "t1": 17.6141,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 17.6141,
+     "t1": 17.7188,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 17.7188,
+     "t1": 17.8235,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 17.8235,
+     "t1": 17.9835,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 17.9835,
+     "t1": 18.0377,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 18.0377,
+     "t1": 18.1423,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 18.1423,
+     "t1": 18.247,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 18.247,
+     "t1": 18.3517,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 17.9835,
+     "t1": 18.0635,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 18.3517,
+     "t1": 18.4892,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 18.4892,
+     "t1": 18.5692,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 18.4892,
+     "t1": 18.66,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 18.66,
+     "t1": 18.8309,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 8.1072,
+     "t1": 14.7983,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 8.1946,
+     "t1": 14.8857,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 18.5692,
+     "t1": 18.6492,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 18.8309,
+     "t1": 19.0017,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 19.0017,
+     "t1": 19.1617,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 19.1617,
+     "t1": 19.3325,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 19.3325,
+     "t1": 19.4372,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 19.4372,
+     "t1": 19.5419,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 19.5419,
+     "t1": 19.6466,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 19.6466,
+     "t1": 19.8066,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 19.8066,
+     "t1": 19.8608,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 19.8608,
+     "t1": 19.9655,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 19.9655,
+     "t1": 20.0702,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 20.0702,
+     "t1": 20.1748,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 19.8066,
+     "t1": 19.8866,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 20.1748,
+     "t1": 20.3123,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 20.3123,
+     "t1": 20.3923,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 20.3123,
+     "t1": 20.4832,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 20.4832,
+     "t1": 20.654,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 20.654,
+     "t1": 20.7587,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 20.7587,
+     "t1": 20.8962,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 20.8962,
+     "t1": 21.5836,
+     "bytes": 32768,
+     "flops": 0
+    }
+   ]
+  },
+  "attention flash, K/V resident": {
+   "shape": "H=1 S=512 d=128 bf16",
+   "latency_us": 21.93310133333333,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.9495,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 1.2991,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 1.3864,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.0,
+     "t1": 0.1047,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.1047,
+     "t1": 0.2094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.2094,
+     "t1": 0.3802,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.3864,
+     "t1": 1.4664,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 1.4664,
+     "t1": 1.6373,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 1.6373,
+     "t1": 1.7973,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 1.7973,
+     "t1": 1.9681,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 1.9681,
+     "t1": 2.0728,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 2.0728,
+     "t1": 2.1775,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.1775,
+     "t1": 2.2822,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.2822,
+     "t1": 2.4422,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.4422,
+     "t1": 2.4963,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 2.4963,
+     "t1": 2.601,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 2.601,
+     "t1": 2.7057,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 2.7057,
+     "t1": 2.8104,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 2.4422,
+     "t1": 2.5222,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 2.8104,
+     "t1": 2.9479,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.9479,
+     "t1": 3.0279,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.9479,
+     "t1": 3.1187,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 3.1187,
+     "t1": 3.2896,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 3.2896,
+     "t1": 3.3942,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 3.3942,
+     "t1": 3.5317,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 3.5317,
+     "t1": 4.2191,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 4.3065,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.5317,
+     "t1": 3.6364,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.6364,
+     "t1": 3.7411,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.7411,
+     "t1": 3.912,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.3065,
+     "t1": 4.3865,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 4.3865,
+     "t1": 4.5573,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.5573,
+     "t1": 4.662,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 4.662,
+     "t1": 4.7667,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.7667,
+     "t1": 4.8714,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.8714,
+     "t1": 5.0314,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 5.0314,
+     "t1": 5.0856,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 5.0856,
+     "t1": 5.1903,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 5.1903,
+     "t1": 5.2949,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 5.2949,
+     "t1": 5.3996,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 5.0314,
+     "t1": 5.1114,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 5.3996,
+     "t1": 5.5371,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.5371,
+     "t1": 5.6171,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.5371,
+     "t1": 5.708,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 5.708,
+     "t1": 5.8788,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.6171,
+     "t1": 5.6971,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 5.8788,
+     "t1": 6.0496,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 6.0496,
+     "t1": 6.2096,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 6.2096,
+     "t1": 6.3805,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.3805,
+     "t1": 6.4852,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 6.4852,
+     "t1": 6.5898,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.5898,
+     "t1": 6.6945,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 6.6945,
+     "t1": 6.8545,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 6.8545,
+     "t1": 6.9087,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 6.9087,
+     "t1": 7.0134,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 7.0134,
+     "t1": 7.1181,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 7.1181,
+     "t1": 7.2228,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 6.8545,
+     "t1": 6.9345,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 7.2228,
+     "t1": 7.3603,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.3603,
+     "t1": 7.4403,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.3603,
+     "t1": 7.5311,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 7.5311,
+     "t1": 7.7019,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 7.7019,
+     "t1": 7.8066,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.8066,
+     "t1": 7.9441,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 7.9441,
+     "t1": 8.6315,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 8.7189,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 7.9441,
+     "t1": 8.0488,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 8.0488,
+     "t1": 8.1535,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 8.1535,
+     "t1": 8.3243,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.7189,
+     "t1": 8.7989,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 8.7989,
+     "t1": 8.9697,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.9697,
+     "t1": 9.0744,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.0744,
+     "t1": 9.1791,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.1791,
+     "t1": 9.2838,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.2838,
+     "t1": 9.4438,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.4438,
+     "t1": 9.4979,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.4979,
+     "t1": 9.6026,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.6026,
+     "t1": 9.7073,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 9.7073,
+     "t1": 9.812,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 9.4438,
+     "t1": 9.5238,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 9.812,
+     "t1": 9.9495,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.9495,
+     "t1": 10.0295,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.9495,
+     "t1": 10.1203,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.1203,
+     "t1": 10.2912,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 10.0295,
+     "t1": 10.1095,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 10.2912,
+     "t1": 10.462,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.462,
+     "t1": 10.5667,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.5667,
+     "t1": 10.6714,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.6714,
+     "t1": 10.7761,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.7761,
+     "t1": 10.9361,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.9361,
+     "t1": 10.9902,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.9902,
+     "t1": 11.0949,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 11.0949,
+     "t1": 11.1996,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 11.1996,
+     "t1": 11.3043,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 10.9361,
+     "t1": 11.0161,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 11.3043,
+     "t1": 11.4418,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.4418,
+     "t1": 11.5218,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.4418,
+     "t1": 11.6126,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 11.6126,
+     "t1": 11.7835,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.5218,
+     "t1": 11.6018,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 11.7835,
+     "t1": 11.9543,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 11.9543,
+     "t1": 12.1143,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 12.1143,
+     "t1": 12.2851,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.2851,
+     "t1": 12.3898,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.3898,
+     "t1": 12.4945,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.4945,
+     "t1": 12.5992,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.5992,
+     "t1": 12.7592,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.7592,
+     "t1": 12.8134,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.8134,
+     "t1": 12.918,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.918,
+     "t1": 13.0227,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 13.0227,
+     "t1": 13.1274,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 12.7592,
+     "t1": 12.8392,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 13.1274,
+     "t1": 13.2649,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 13.2649,
+     "t1": 13.3449,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.2649,
+     "t1": 13.4357,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 13.4357,
+     "t1": 13.6066,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 13.6066,
+     "t1": 13.7113,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.7113,
+     "t1": 13.8488,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 13.8488,
+     "t1": 14.5362,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 0.0,
+     "t1": 14.6235,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 13.8488,
+     "t1": 13.9535,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 13.9535,
+     "t1": 14.0581,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 14.0581,
+     "t1": 14.229,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 14.6235,
+     "t1": 14.7035,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 14.7035,
+     "t1": 14.8744,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 14.8744,
+     "t1": 14.9791,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 14.9791,
+     "t1": 15.0837,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 15.0837,
+     "t1": 15.1884,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 15.1884,
+     "t1": 15.3484,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 15.3484,
+     "t1": 15.4026,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 15.4026,
+     "t1": 15.5073,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 15.5073,
+     "t1": 15.612,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 15.612,
+     "t1": 15.7167,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 15.3484,
+     "t1": 15.4284,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 15.7167,
+     "t1": 15.8542,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 15.8542,
+     "t1": 15.9342,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 15.8542,
+     "t1": 16.025,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.025,
+     "t1": 16.1958,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 15.9342,
+     "t1": 16.0142,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 16.1958,
+     "t1": 16.3667,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 16.3667,
+     "t1": 16.4713,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.4713,
+     "t1": 16.576,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 16.576,
+     "t1": 16.6807,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 16.6807,
+     "t1": 16.8407,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 16.8407,
+     "t1": 16.8949,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.8949,
+     "t1": 16.9996,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 16.9996,
+     "t1": 17.1043,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 17.1043,
+     "t1": 17.2089,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 16.8407,
+     "t1": 16.9207,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 17.2089,
+     "t1": 17.3464,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 17.3464,
+     "t1": 17.4264,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 17.3464,
+     "t1": 17.5173,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 17.5173,
+     "t1": 17.6881,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 17.4264,
+     "t1": 17.5064,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 17.6881,
+     "t1": 17.8589,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 17.8589,
+     "t1": 17.9636,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 17.9636,
+     "t1": 18.0683,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 18.0683,
+     "t1": 18.173,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 18.173,
+     "t1": 18.333,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 18.333,
+     "t1": 18.3872,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 18.3872,
+     "t1": 18.4919,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 18.4919,
+     "t1": 18.5966,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 18.5966,
+     "t1": 18.7012,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 18.333,
+     "t1": 18.413,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 18.7012,
+     "t1": 18.8387,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 18.8387,
+     "t1": 18.9187,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 18.8387,
+     "t1": 19.0096,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 19.0096,
+     "t1": 19.1804,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 18.9187,
+     "t1": 18.9987,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 19.1804,
+     "t1": 19.3512,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 19.3512,
+     "t1": 19.5112,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 19.5112,
+     "t1": 19.6821,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 19.6821,
+     "t1": 19.7868,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 19.7868,
+     "t1": 19.8914,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 19.8914,
+     "t1": 19.9961,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 19.9961,
+     "t1": 20.1561,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 20.1561,
+     "t1": 20.2103,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 20.2103,
+     "t1": 20.315,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 20.315,
+     "t1": 20.4197,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 20.4197,
+     "t1": 20.5244,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 20.1561,
+     "t1": 20.2361,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 20.5244,
+     "t1": 20.6619,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 20.6619,
+     "t1": 20.7419,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 20.6619,
+     "t1": 20.8327,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_tensor",
+     "lane": "Vector",
+     "t0": 20.8327,
+     "t1": 21.0035,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 21.0035,
+     "t1": 21.1082,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 21.1082,
+     "t1": 21.2457,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 21.2457,
+     "t1": 21.9331,
+     "bytes": 32768,
+     "flops": 0
+    }
+   ]
+  },
+  "attention flash, balanced": {
+   "shape": "H=1 S=512 d=128 bf16",
+   "latency_us": 15.957892999999997,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.9495,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 1.2991,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 1.3864,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.0,
+     "t1": 0.1047,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.1047,
+     "t1": 0.2094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.2094,
+     "t1": 0.3802,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.3864,
+     "t1": 1.4664,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 1.4664,
+     "t1": 1.6264,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 1.6264,
+     "t1": 1.7864,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 1.7864,
+     "t1": 1.9573,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 1.9573,
+     "t1": 2.062,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.062,
+     "t1": 2.222,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.222,
+     "t1": 2.2761,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.2761,
+     "t1": 2.3808,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 2.222,
+     "t1": 2.302,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 2.302,
+     "t1": 2.462,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.462,
+     "t1": 2.542,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 2.542,
+     "t1": 2.7128,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 2.7128,
+     "t1": 2.8175,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.8175,
+     "t1": 2.955,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 2.955,
+     "t1": 3.6424,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 3.7297,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 2.955,
+     "t1": 3.0597,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.0597,
+     "t1": 3.1643,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 3.1643,
+     "t1": 3.3352,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.7297,
+     "t1": 3.8097,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 3.8097,
+     "t1": 3.9806,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 3.9806,
+     "t1": 4.0853,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.0853,
+     "t1": 4.2453,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.2453,
+     "t1": 4.2994,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.2994,
+     "t1": 4.4041,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 4.2453,
+     "t1": 4.3253,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 4.3253,
+     "t1": 4.4853,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.4853,
+     "t1": 4.5653,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 4.5653,
+     "t1": 4.7361,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.5653,
+     "t1": 4.6453,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 4.6453,
+     "t1": 4.8053,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 4.8053,
+     "t1": 4.9653,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 4.9653,
+     "t1": 5.1361,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.1361,
+     "t1": 5.2408,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 5.2408,
+     "t1": 5.4008,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 5.4008,
+     "t1": 5.4549,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.4549,
+     "t1": 5.5596,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 5.4008,
+     "t1": 5.4808,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 5.4808,
+     "t1": 5.6408,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.6408,
+     "t1": 5.7208,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 5.7208,
+     "t1": 5.8916,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 5.8916,
+     "t1": 5.9963,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.9963,
+     "t1": 6.1338,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 6.1338,
+     "t1": 6.8212,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 6.9086,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 6.1338,
+     "t1": 6.2385,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 6.2385,
+     "t1": 6.3432,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 6.3432,
+     "t1": 6.514,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 6.9086,
+     "t1": 6.9886,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 6.9886,
+     "t1": 7.1594,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.1594,
+     "t1": 7.2641,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 7.2641,
+     "t1": 7.4241,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 7.4241,
+     "t1": 7.4782,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.4782,
+     "t1": 7.5829,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 7.4241,
+     "t1": 7.5041,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 7.5041,
+     "t1": 7.6641,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.6641,
+     "t1": 7.7441,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 7.7441,
+     "t1": 7.9149,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.7441,
+     "t1": 7.8241,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 7.9149,
+     "t1": 8.0857,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.0857,
+     "t1": 8.1904,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 8.1904,
+     "t1": 8.3504,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 8.3504,
+     "t1": 8.4046,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.4046,
+     "t1": 8.5093,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 8.3504,
+     "t1": 8.4304,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 8.4304,
+     "t1": 8.5904,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.5904,
+     "t1": 8.6704,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 8.6704,
+     "t1": 8.8413,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.6704,
+     "t1": 8.7504,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 8.7504,
+     "t1": 8.9104,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 8.9104,
+     "t1": 9.0704,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 9.0704,
+     "t1": 9.2413,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.2413,
+     "t1": 9.346,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.346,
+     "t1": 9.506,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.506,
+     "t1": 9.5601,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.5601,
+     "t1": 9.6648,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 9.506,
+     "t1": 9.586,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 9.586,
+     "t1": 9.746,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.746,
+     "t1": 9.826,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.826,
+     "t1": 9.9968,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 9.9968,
+     "t1": 10.1015,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.1015,
+     "t1": 10.239,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 10.239,
+     "t1": 10.9264,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 0.0,
+     "t1": 11.0137,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 10.239,
+     "t1": 10.3437,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 10.3437,
+     "t1": 10.4484,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 10.4484,
+     "t1": 10.6192,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.0137,
+     "t1": 11.0937,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 11.0937,
+     "t1": 11.2646,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.2646,
+     "t1": 11.3693,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 11.3693,
+     "t1": 11.5293,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 11.5293,
+     "t1": 11.5834,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.5834,
+     "t1": 11.6881,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 11.5293,
+     "t1": 11.6093,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 11.6093,
+     "t1": 11.7693,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.7693,
+     "t1": 11.8493,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 11.8493,
+     "t1": 12.0201,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.8493,
+     "t1": 11.9293,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 12.0201,
+     "t1": 12.1909,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.1909,
+     "t1": 12.2956,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.2956,
+     "t1": 12.4556,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.4556,
+     "t1": 12.5098,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.5098,
+     "t1": 12.6145,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 12.4556,
+     "t1": 12.5356,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 12.5356,
+     "t1": 12.6956,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 12.6956,
+     "t1": 12.7756,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.7756,
+     "t1": 12.9464,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 12.7756,
+     "t1": 12.8556,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 12.9464,
+     "t1": 13.1173,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.1173,
+     "t1": 13.222,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 13.222,
+     "t1": 13.382,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 13.382,
+     "t1": 13.4361,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.4361,
+     "t1": 13.5408,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 13.382,
+     "t1": 13.462,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 13.462,
+     "t1": 13.622,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 13.622,
+     "t1": 13.702,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 13.702,
+     "t1": 13.8728,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 13.702,
+     "t1": 13.782,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 13.782,
+     "t1": 13.942,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 13.942,
+     "t1": 14.102,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 14.102,
+     "t1": 14.2728,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 14.2728,
+     "t1": 14.3775,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 14.3775,
+     "t1": 14.5375,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 14.5375,
+     "t1": 14.5917,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 14.5917,
+     "t1": 14.6963,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 14.5375,
+     "t1": 14.6175,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 14.6175,
+     "t1": 14.7775,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 14.7775,
+     "t1": 14.8575,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 14.8575,
+     "t1": 15.0283,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 15.0283,
+     "t1": 15.133,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 15.133,
+     "t1": 15.2705,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 15.2705,
+     "t1": 15.9579,
+     "bytes": 32768,
+     "flops": 0
+    }
+   ]
+  },
+  "attention flash, 2-tile ILP": {
+   "shape": "H=1 S=512 d=128 bf16",
+   "latency_us": 14.248367666666663,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.9495,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 1.2991,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 1.3864,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.0,
+     "t1": 0.1047,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.1047,
+     "t1": 0.2094,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.2094,
+     "t1": 0.3802,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 0.0,
+     "t1": 1.4738,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.3802,
+     "t1": 0.4849,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.4849,
+     "t1": 0.5896,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 0.5896,
+     "t1": 0.7604,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.3864,
+     "t1": 1.4664,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 1.4664,
+     "t1": 1.6264,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 1.6264,
+     "t1": 1.7864,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 1.7864,
+     "t1": 1.9573,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 1.9573,
+     "t1": 2.062,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.062,
+     "t1": 2.222,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.222,
+     "t1": 2.2761,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.2761,
+     "t1": 2.3808,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 2.222,
+     "t1": 2.302,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 2.302,
+     "t1": 2.462,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.462,
+     "t1": 2.542,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 2.542,
+     "t1": 2.7128,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.542,
+     "t1": 2.622,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 2.7128,
+     "t1": 2.8836,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 2.8836,
+     "t1": 2.9883,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 2.9883,
+     "t1": 3.1483,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 3.1483,
+     "t1": 3.2025,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 3.2025,
+     "t1": 3.3072,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 3.1483,
+     "t1": 3.2283,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 3.2283,
+     "t1": 3.3883,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.3883,
+     "t1": 3.4683,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 3.4683,
+     "t1": 3.6391,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.4683,
+     "t1": 3.5483,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 3.5483,
+     "t1": 3.7083,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 3.7083,
+     "t1": 3.8683,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 3.8683,
+     "t1": 4.0391,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.0391,
+     "t1": 4.1438,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.1438,
+     "t1": 4.3038,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 4.3038,
+     "t1": 4.358,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.358,
+     "t1": 4.4627,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 4.3038,
+     "t1": 4.3838,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 4.3838,
+     "t1": 4.5438,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.5438,
+     "t1": 4.6238,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 4.6238,
+     "t1": 4.7947,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 4.7947,
+     "t1": 4.8993,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.8993,
+     "t1": 5.0368,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 5.0368,
+     "t1": 5.7242,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 5.0368,
+     "t1": 5.1415,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 5.1415,
+     "t1": 5.279,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 5.279,
+     "t1": 5.9664,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 6.0538,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 5.279,
+     "t1": 5.3837,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 5.3837,
+     "t1": 5.4884,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 5.4884,
+     "t1": 5.6592,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 0.0,
+     "t1": 6.1412,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 5.6592,
+     "t1": 5.7639,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 5.7639,
+     "t1": 5.8686,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "memset",
+     "lane": "Vector",
+     "t0": 5.8686,
+     "t1": 6.0395,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 6.0538,
+     "t1": 6.1338,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 6.1338,
+     "t1": 6.3046,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.3046,
+     "t1": 6.4093,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 6.4093,
+     "t1": 6.5693,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 6.5693,
+     "t1": 6.6235,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 6.6235,
+     "t1": 6.7282,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 6.5693,
+     "t1": 6.6493,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 6.6493,
+     "t1": 6.8093,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 6.8093,
+     "t1": 6.8893,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 6.8893,
+     "t1": 7.0602,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 6.8893,
+     "t1": 6.9693,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 7.0602,
+     "t1": 7.231,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.231,
+     "t1": 7.3357,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 7.3357,
+     "t1": 7.4957,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 7.4957,
+     "t1": 7.5498,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 7.5498,
+     "t1": 7.6545,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 7.4957,
+     "t1": 7.5757,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 7.5757,
+     "t1": 7.7357,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.7357,
+     "t1": 7.8157,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 7.8157,
+     "t1": 7.9865,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.8157,
+     "t1": 7.8957,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 7.9865,
+     "t1": 8.1573,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.1573,
+     "t1": 8.262,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 8.262,
+     "t1": 8.422,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 8.422,
+     "t1": 8.4762,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 8.4762,
+     "t1": 8.5809,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 8.422,
+     "t1": 8.502,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 8.502,
+     "t1": 8.662,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.662,
+     "t1": 8.742,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 8.742,
+     "t1": 8.9129,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.742,
+     "t1": 8.822,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 8.9129,
+     "t1": 9.0837,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.0837,
+     "t1": 9.1884,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.1884,
+     "t1": 9.3484,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 9.3484,
+     "t1": 9.4025,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 9.4025,
+     "t1": 9.5072,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 9.3484,
+     "t1": 9.4284,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 9.4284,
+     "t1": 9.5884,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.5884,
+     "t1": 9.6684,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 9.6684,
+     "t1": 9.8392,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 9.6684,
+     "t1": 9.7484,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 9.7484,
+     "t1": 9.9084,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 9.9084,
+     "t1": 10.0684,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 10.0684,
+     "t1": 10.2392,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.2392,
+     "t1": 10.3439,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.3439,
+     "t1": 10.5039,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.5039,
+     "t1": 10.5581,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 10.5581,
+     "t1": 10.6628,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 10.5039,
+     "t1": 10.5839,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 10.5839,
+     "t1": 10.7439,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 10.7439,
+     "t1": 10.8239,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 10.8239,
+     "t1": 10.9947,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 10.8239,
+     "t1": 10.9039,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 10.9947,
+     "t1": 11.1656,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.1656,
+     "t1": 11.2703,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 11.2703,
+     "t1": 11.4303,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 11.4303,
+     "t1": 11.4844,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.4844,
+     "t1": 11.5891,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 11.4303,
+     "t1": 11.5103,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 11.5103,
+     "t1": 11.6703,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.6703,
+     "t1": 11.7503,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 11.7503,
+     "t1": 11.9211,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.7503,
+     "t1": 11.8303,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 11.8303,
+     "t1": 11.9903,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "affine_select",
+     "lane": "GpSimd",
+     "t0": 11.9903,
+     "t1": 12.1503,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 12.1503,
+     "t1": 12.3211,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.3211,
+     "t1": 12.4258,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.4258,
+     "t1": 12.5858,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 12.5858,
+     "t1": 12.6399,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 12.6399,
+     "t1": 12.7446,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_transpose",
+     "lane": "Tensor",
+     "t0": 12.5858,
+     "t1": 12.6658,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Scalar",
+     "t0": 12.6658,
+     "t1": 12.8258,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 12.8258,
+     "t1": 12.9058,
+     "bytes": 0,
+     "flops": 4194304
+    },
+    {
+     "op": "scalar_tensor_tensor",
+     "lane": "Vector",
+     "t0": 12.9058,
+     "t1": 13.0766,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 13.0766,
+     "t1": 13.1813,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.1813,
+     "t1": 13.3188,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 13.3188,
+     "t1": 14.0062,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 13.3188,
+     "t1": 13.4235,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 13.4235,
+     "t1": 13.561,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 13.561,
+     "t1": 14.2484,
+     "bytes": 32768,
+     "flops": 0
+    }
+   ]
+  },
+  "matmul naive": {
+   "shape": "512x512x512 bf16",
+   "latency_us": 13.298607999999996,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.6874,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 1.0369,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.0369,
+     "t1": 1.2769,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 1.1243,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 0.0,
+     "t1": 1.4738,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.4738,
+     "t1": 1.7138,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 1.5612,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 0.0,
+     "t1": 1.9107,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.9107,
+     "t1": 2.1507,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 1.9981,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 0.0,
+     "t1": 2.3476,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.3476,
+     "t1": 2.5876,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 2.5876,
+     "t1": 2.8251,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 2.8251,
+     "t1": 3.7747,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 0.0,
+     "t1": 3.862,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 0.0,
+     "t1": 4.2116,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.2116,
+     "t1": 4.4516,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 0.0,
+     "t1": 4.2989,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 0.0,
+     "t1": 4.6485,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.6485,
+     "t1": 4.8885,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 0.0,
+     "t1": 4.7358,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 0.0,
+     "t1": 5.0854,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.0854,
+     "t1": 5.3254,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 0.0,
+     "t1": 5.1728,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.6874,
+     "t1": 5.5223,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 5.5223,
+     "t1": 5.7623,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 5.7623,
+     "t1": 5.9998,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 5.9998,
+     "t1": 6.9493,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 1.1243,
+     "t1": 7.0367,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 1.4738,
+     "t1": 7.3862,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.3862,
+     "t1": 7.6262,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 1.5612,
+     "t1": 7.4736,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 1.9107,
+     "t1": 7.8231,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 7.8231,
+     "t1": 8.0631,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 1.9981,
+     "t1": 7.9105,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 2.3476,
+     "t1": 8.26,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.26,
+     "t1": 8.5,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 3.7747,
+     "t1": 8.3474,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 3.862,
+     "t1": 8.6969,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 8.6969,
+     "t1": 8.9369,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 8.9369,
+     "t1": 9.1744,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 9.1744,
+     "t1": 10.124,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 4.2989,
+     "t1": 10.2113,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 4.6485,
+     "t1": 10.5609,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 10.5609,
+     "t1": 10.8009,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 4.7358,
+     "t1": 10.6482,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 5.0854,
+     "t1": 10.9978,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 10.9978,
+     "t1": 11.2378,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 5.1728,
+     "t1": 11.0852,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 5.5223,
+     "t1": 11.4347,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.4347,
+     "t1": 11.6747,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 6.9493,
+     "t1": 11.5221,
+     "bytes": 32768,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 7.0367,
+     "t1": 11.8716,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 11.8716,
+     "t1": 12.1116,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 12.1116,
+     "t1": 12.3491,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 12.3491,
+     "t1": 13.2986,
+     "bytes": 131072,
+     "flops": 0
+    }
+   ]
+  },
+  "matmul blocked": {
+   "shape": "512x512x512 bf16",
+   "latency_us": 6.654651999999998,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 0.9495,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 0.0,
+     "t1": 1.2991,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.2991,
+     "t1": 1.5391,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.5391,
+     "t1": 1.7791,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 1.7791,
+     "t1": 2.0191,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.0191,
+     "t1": 2.2591,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 1.6486,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 0.0,
+     "t1": 1.9981,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.2591,
+     "t1": 2.4991,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.4991,
+     "t1": 2.7391,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.7391,
+     "t1": 2.9791,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 2.9791,
+     "t1": 3.2191,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 2.3476,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 0.0,
+     "t1": 2.6972,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.2191,
+     "t1": 3.4591,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.4591,
+     "t1": 3.6991,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.6991,
+     "t1": 3.9391,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 3.9391,
+     "t1": 4.1791,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 3.0467,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 0.0,
+     "t1": 3.3962,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.1791,
+     "t1": 4.4191,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.4191,
+     "t1": 4.6591,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.6591,
+     "t1": 4.8991,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "nc_matmul",
+     "lane": "Tensor",
+     "t0": 4.8991,
+     "t1": 5.1391,
+     "bytes": 0,
+     "flops": 16777216
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 4.4191,
+     "t1": 4.6566,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 4.6566,
+     "t1": 5.6061,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 4.6591,
+     "t1": 4.8966,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 4.8966,
+     "t1": 5.9556,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 4.8991,
+     "t1": 5.1366,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 5.1366,
+     "t1": 6.3051,
+     "bytes": 131072,
+     "flops": 0
+    },
+    {
+     "op": "tensor_copy",
+     "lane": "Vector",
+     "t0": 5.1391,
+     "t1": 5.3766,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 5.3766,
+     "t1": 6.6547,
+     "bytes": 131072,
+     "flops": 0
+    }
+   ]
+  },
+  "softmax unfused": {
+   "shape": "512x2048 bf16",
+   "latency_us": 66.52398399999998,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 1.9981,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 1.9981,
+     "t1": 3.1689,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 3.1689,
+     "t1": 3.7703,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 5.1684,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 5.1684,
+     "t1": 6.3392,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 6.3392,
+     "t1": 6.9406,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 8.3387,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 8.3387,
+     "t1": 9.5095,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 9.5095,
+     "t1": 10.1109,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 11.509,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 11.509,
+     "t1": 12.6798,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 12.6798,
+     "t1": 13.2812,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 0.0,
+     "t1": 14.6793,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 13.2812,
+     "t1": 14.6807,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 14.6807,
+     "t1": 15.8515,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 15.8515,
+     "t1": 17.6115,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 17.6115,
+     "t1": 18.7823,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 17.6115,
+     "t1": 21.0077,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 18.7823,
+     "t1": 21.0091,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 0.0,
+     "t1": 22.4072,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 13.2812,
+     "t1": 22.4085,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 22.4085,
+     "t1": 23.5794,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 23.5794,
+     "t1": 25.3394,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 25.3394,
+     "t1": 26.5102,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 25.3394,
+     "t1": 28.7356,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 26.5102,
+     "t1": 28.7369,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 1.9981,
+     "t1": 30.135,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 13.2812,
+     "t1": 30.1364,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 30.1364,
+     "t1": 31.3072,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 31.3072,
+     "t1": 33.0672,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 33.0672,
+     "t1": 34.2381,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 33.0672,
+     "t1": 36.4634,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 34.2381,
+     "t1": 36.4648,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 8.3387,
+     "t1": 37.8629,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 13.2812,
+     "t1": 37.8643,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 37.8643,
+     "t1": 39.0351,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 39.0351,
+     "t1": 40.7951,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 40.7951,
+     "t1": 41.9659,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 40.7951,
+     "t1": 44.1913,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 41.9659,
+     "t1": 44.1927,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q8",
+     "t0": 44.1913,
+     "t1": 47.5875,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q9",
+     "t0": 44.1927,
+     "t1": 47.5889,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 47.5889,
+     "t1": 48.2264,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q10",
+     "t0": 48.2264,
+     "t1": 50.2245,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q11",
+     "t0": 44.1913,
+     "t1": 53.0207,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q12",
+     "t0": 44.1927,
+     "t1": 53.022,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 53.022,
+     "t1": 53.6595,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q13",
+     "t0": 53.6595,
+     "t1": 55.6576,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q14",
+     "t0": 44.1913,
+     "t1": 58.4538,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q15",
+     "t0": 44.1927,
+     "t1": 58.4552,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 58.4552,
+     "t1": 59.0927,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 59.0927,
+     "t1": 61.0908,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 44.1913,
+     "t1": 63.887,
+     "bytes": 1048576,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 44.1927,
+     "t1": 63.8884,
+     "bytes": 512,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 63.8884,
+     "t1": 64.5259,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 64.5259,
+     "t1": 66.524,
+     "bytes": 524288,
+     "flops": 0
+    }
+   ]
+  },
+  "softmax fused": {
+   "shape": "512x2048 bf16",
+   "latency_us": 28.458143999999994,
+   "events": [
+    {
+     "op": "dma_copy",
+     "lane": "DMA q0",
+     "t0": 0.0,
+     "t1": 1.9981,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 1.9981,
+     "t1": 3.1689,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 3.1689,
+     "t1": 4.9289,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 3.1689,
+     "t1": 3.2736,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 4.9289,
+     "t1": 5.5664,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q1",
+     "t0": 5.5664,
+     "t1": 7.5645,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q2",
+     "t0": 0.0,
+     "t1": 8.9626,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 8.9626,
+     "t1": 10.1335,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 10.1335,
+     "t1": 11.8935,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 10.1335,
+     "t1": 10.2382,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 11.8935,
+     "t1": 12.531,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q3",
+     "t0": 12.531,
+     "t1": 14.5291,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q4",
+     "t0": 0.0,
+     "t1": 15.9272,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 15.9272,
+     "t1": 17.098,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 17.098,
+     "t1": 18.858,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 17.098,
+     "t1": 17.2027,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 18.858,
+     "t1": 19.4955,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q5",
+     "t0": 19.4955,
+     "t1": 21.4936,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q6",
+     "t0": 0.0,
+     "t1": 22.8917,
+     "bytes": 524288,
+     "flops": 0
+    },
+    {
+     "op": "tensor_reduce",
+     "lane": "Vector",
+     "t0": 22.8917,
+     "t1": 24.0625,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "activation",
+     "lane": "Scalar",
+     "t0": 24.0625,
+     "t1": 25.8225,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "reciprocal",
+     "lane": "Vector",
+     "t0": 24.0625,
+     "t1": 24.1672,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "tensor_scalar",
+     "lane": "Vector",
+     "t0": 25.8225,
+     "t1": 26.46,
+     "bytes": 0,
+     "flops": 0
+    },
+    {
+     "op": "dma_copy",
+     "lane": "DMA q7",
+     "t0": 26.46,
+     "t1": 28.4581,
+     "bytes": 524288,
+     "flops": 0
+    }
+   ]
+  }
+ }
+}
