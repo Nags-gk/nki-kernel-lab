@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NKI Kernel Lab</title>
+<meta name="description" content="Trainium2 kernels in NKI: matmul, softmax, RMSNorm and causal flash attention, verified on the Neuron CPU simulator and profiled instruction by instruction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#E8EDF1; --panel:#F7F9FB; --ink:#1A2330; --ink-2:#4A5666; --rule:#C9D2DB;
+  --tensor:#2F5DA8; --vector:#0E7C7B; --scalar:#A87B1F; --gpsimd:#6E4A9E; --dma:#5E6B78;
+  --good:#2E7D4F; --focus:#2F5DA8;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:Archivo,system-ui,sans-serif;font-size:17px;line-height:1.55;font-variation-settings:"wdth" 100}
+a{color:var(--tensor)}
+a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+header.hero{padding:56px 0 8px}
+.hero h1{font-size:clamp(40px,7vw,84px);line-height:.95;margin:0;font-weight:800;font-variation-settings:"wdth" 125;letter-spacing:-.01em}
+.hero .lede{max-width:62ch;font-size:19px;color:var(--ink-2);margin:20px 0 0}
+.hero .links{margin-top:18px;display:flex;gap:18px;flex-wrap:wrap;font-weight:600}
+.trace-shell{margin:36px 0 0;background:var(--panel);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.trace-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:16px 24px 6px;max-width:1120px;margin:0 auto}
+.trace-bar label{font-weight:600}
+select{font:inherit;font-size:15px;padding:6px 10px;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink)}
+.trace-meta{color:var(--ink-2);font-size:15px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;margin-left:auto}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:2px;display:inline-block}
+#trace{display:block;width:100%;height:300px;cursor:crosshair}
+.trace-foot{max-width:1120px;margin:0 auto;padding:4px 24px 14px;font-size:14px;color:var(--ink-2);min-height:2.6em}
+section{padding:56px 0 8px}
+section h2{font-size:clamp(26px,3.4vw,38px);line-height:1.1;margin:0 0 10px;font-weight:750;font-variation-settings:"wdth" 112}
+section > .wrap > p{max-width:68ch;color:var(--ink-2);margin:0 0 22px}
+.ladder{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.ladder li{display:grid;grid-template-columns:2.2em minmax(180px,1.3fr) 2fr;gap:6px 18px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:center}
+.ladder .n{font-weight:800;font-size:22px;font-variation-settings:"wdth" 70;color:var(--ink-2)}
+.ladder .name{font-weight:650}
+.ladder .name small{display:block;font-weight:400;color:var(--ink-2);font-size:14px}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:84px 1fr 96px;gap:10px;align-items:center;font-size:14px}
+.bar .track{height:14px;background:#DCE3E9;border-radius:2px;overflow:hidden}
+.bar .fill{height:100%}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+figure{margin:0;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px}
+figcaption{font-weight:650;margin-bottom:8px}
+figcaption small{display:block;font-weight:400;color:var(--ink-2);font-size:14px}
+svg text{font-family:Archivo,sans-serif;font-size:12px;fill:var(--ink-2)}
+table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule)}
+th{font-weight:650}
+td.num,th.num{text-align:right}
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--rule);border-radius:8px}
+.note{font-size:15px;color:var(--ink-2);max-width:72ch}
+.cols{columns:2 320px;column-gap:40px}
+.cols p{margin:0 0 14px;break-inside:avoid}
+footer{padding:48px 0 64px;color:var(--ink-2);font-size:14px}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:13px;font-weight:600}
+.tag.m{background:#D6E6DC;color:#1F5A38}.tag.o{background:#E9E0CC;color:#6B4E12}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;padding:6px 9px;border-radius:5px;display:none;z-index:5;max-width:280px}
+@media (max-width:760px){
+  .grid2{grid-template-columns:1fr}
+  .ladder li{grid-template-columns:2em 1fr}
+  .ladder .bars{grid-column:1 / -1}
+  .legend{margin-left:0}
+  body{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>NKI Kernel Lab</h1>
+    <p class="lede">Matmul, softmax, RMSNorm, SwiGLU and causal flash attention written in NKI for Trainium2, checked against PyTorch and JAX on the Neuron CPU simulator, and profiled one instruction at a time. Below is a kernel's instruction stream across the NeuronCore's engines.</p>
+    <div class="links">
+      <a href="https://github.com/Nags-gk/nki-kernel-lab">Source on GitHub</a>
+      <a href="#method">How the numbers are made</a>
+    </div>
+  </div>
+</header>
+
+<div class="trace-shell" aria-label="Instruction timeline">
+  <div class="trace-bar">
+    <label for="traceSel">Kernel</label>
+    <select id="traceSel"></select>
+    <span class="trace-meta" id="traceMeta"></span>
+    <div class="legend" id="legend"></div>
+  </div>
+  <canvas id="trace" role="img" aria-label="Modeled instruction timeline per engine"></canvas>
+  <div class="trace-foot" id="traceFoot">Drag to zoom, double-click to reset. Hover a block to see the instruction.</div>
+</div>
+
+<section id="ladder">
+  <div class="wrap">
+    <h2>Causal attention, one change at a time</h2>
+    <p id="ladderIntro">Each step keeps the output identical and changes one thing. Bars show modeled latency and bytes moved between HBM and SBUF.</p>
+    <ol class="ladder" id="ladderList"></ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Where the time goes</h2>
+    <p>Score traffic in the naive kernel grows with the square of sequence length; flash attention's grows linearly. The roofline places each kernel against the Tensor Engine's BF16 peak and the core's share of HBM bandwidth.</p>
+    <div class="grid2">
+      <figure><figcaption>HBM traffic vs. sequence length<small>One head, d = 128, bf16. Log scale.</small></figcaption><div id="scaling"></div></figure>
+      <figure><figcaption>Roofline, one NeuronCore-v3<small>Tensor Engine kernels only; arithmetic intensity uses actual bytes moved. Hover a point for its kernel.</small></figcaption><div id="roofline"></div><div class="legend" style="margin:6px 0 0"><span><i style="background:var(--tensor)"></i>Matmul</span><span><i style="background:var(--gpsimd)"></i>Attention steps</span></div></figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Matmul and normalization kernels</h2>
+    <p>Blocking keeps a 2×4 or 4×2 grid of accumulators in the 8 PSUM banks so every loaded tile is reused. Fused softmax and RMSNorm read each row from HBM once.</p>
+    <div class="tablewrap"><table id="kernTable"></table></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>A full decoder block on these kernels</h2>
+    <p id="blockIntro"></p>
+    <figure><figcaption>Modeled latency by op<small id="blockCap"></small></figcaption><div id="blockChart"></div></figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Correctness</h2>
+    <p>Max absolute error against two independent references, on shapes that are deliberately not multiples of the 128-row tile.</p>
+    <div class="tablewrap"><table id="corrTable"></table></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <h2>How the numbers are made</h2>
+    <div class="cols note" id="methodText">
+      <p><span class="tag m">Measured</span> Correctness, instruction counts per engine, DMA bytes, FLOPs and per-partition SBUF/PSUM footprint. These come from the instructions the kernels actually issue on the NKI CPU simulator.</p>
+      <p><span class="tag o">Modeled</span> Every latency on this page. The simulator reports no timing, so a first-order model of one Trainium2 NeuronCore-v3 assigns each instruction a cost and list-schedules it onto in-order engine queues, honouring buffer dependencies. Treat latencies as a way to compare variants, not as hardware measurements.</p>
+      <p>From AWS's Trainium2 architecture guide: Tensor Engine 79 TFLOPS BF16 and 20 TFLOPS FP32 at 2.4 GHz; Vector Engine 0.96 GHz with 512 (16-bit) or 256 elements per cycle; Scalar Engine 1.2 GHz, 128 elements per cycle; SBUF 224 KiB and PSUM 16 KiB per partition; 3 TB/s HBM per 8-core chip; 16 DMA engines per core; about 600 ns per hardware-DGE DMA.</p>
+      <p>Assumptions, not documented: HBM bandwidth splits evenly across cores (375 GB/s each); NeuronCore-v2 fixed instruction overheads (64 Tensor, 100 Vector, 64 Scalar cycles) carry over to v3; GpSimd runs at Scalar Engine width; buffers are unlimited, so DMA prefetch overlaps as far as dependencies allow.</p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap" id="footer"></div></footer>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const ENG = {Tensor:'--tensor',Vector:'--vector',Scalar:'--scalar',GpSimd:'--gpsimd',DMA:'--dma'};
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const color = e => css(ENG[e] || '--dma');
+const fmtUs = u => u >= 1000 ? (u/1000).toFixed(2)+' ms' : u.toFixed(u < 10 ? 1 : 0)+' µs';
+const fmtB = b => b >= 1e9 ? (b/1e9).toFixed(2)+' GB' : b >= 1e6 ? (b/1e6).toFixed(1)+' MB' : (b/1e3).toFixed(0)+' KB';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tip = document.getElementById('tip');
+function showTip(x, y, html){ tip.innerHTML = html; tip.style.display='block';
+  const w = tip.offsetWidth; tip.style.left = Math.min(x+14, innerWidth-w-8)+'px'; tip.style.top = (y+14)+'px'; }
+function hideTip(){ tip.style.display='none'; }
+
+function svgEl(tag, attrs, parent){ const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+
+/* ---------- trace viewer ---------- */
+let TR = {}, view = null, cur = null;
+function laneOf(e){ return e.lane.startsWith('DMA') ? 'DMA' : e.lane; }
+function drawTrace(){
+  const cv = document.getElementById('trace'), dpr = devicePixelRatio || 1;
+  const W = cv.clientWidth, H = cv.clientHeight; cv.width = W*dpr; cv.height = H*dpr;
+  const g = cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H);
+  if (!cur) return;
+  const lanes = ['Tensor','Vector','Scalar','GpSimd','DMA'];
+  const left = Math.min(110, W*0.2), right = 16, top = 10, bottom = 30;
+  const lh = (H-top-bottom)/lanes.length;
+  const [t0, t1] = view; const sx = t => left + (t - t0)/(t1 - t0)*(W-left-right);
+  g.font = '600 13px Archivo, sans-serif';
+  lanes.forEach((l,i)=>{ const y = top + i*lh;
+    g.fillStyle = i%2 ? '#EEF2F5' : '#F7F9FB'; g.fillRect(0,y,W,lh);
+    g.fillStyle = color(l); g.fillText(l === 'DMA' ? 'DMA (16 q)' : l, 12, y+lh/2+4); });
+  cur._hits = [];
+  for (const e of cur.events){
+    if (e.t1 < t0 || e.t0 > t1) continue;
+    const L = laneOf(e), i = lanes.indexOf(L); if (i < 0) continue;
+    let y = top + i*lh + 4, h = lh - 8;
+    if (L === 'DMA'){ const q = +e.lane.slice(5) || 0; h = Math.max(2,(lh-8)/16); y = top + i*lh + 4 + q*h; }
+    const x0 = Math.max(left, sx(e.t0)), x1 = Math.min(W-right, sx(e.t1));
+    g.fillStyle = color(L); g.globalAlpha = .88; g.fillRect(x0, y, Math.max(1, x1-x0-.5), h); g.globalAlpha = 1;
+    cur._hits.push([x0, y, Math.max(2,x1-x0), h, e]);
+  }
+  g.fillStyle = css('--ink-2'); g.font = '12px Archivo, sans-serif';
+  const ticks = 6; for (let k=0;k<=ticks;k++){ const t = t0 + (t1-t0)*k/ticks, x = sx(t);
+    g.fillRect(x, H-bottom, 1, 5); g.fillText(fmtUs(t), Math.min(x-10, W-60), H-bottom+18); }
+}
+function selectTrace(name){
+  cur = TR[name]; const end = Math.max(...cur.events.map(e=>e.t1));
+  view = [0, end * 1.01];
+  const counts = {}; cur.events.forEach(e=>{ const l = laneOf(e); counts[l]=(counts[l]||0)+1; });
+  document.getElementById('traceMeta').textContent =
+    `${cur.shape}. ${cur.events.length} instructions, ${fmtUs(cur.latency_us)} modeled.`;
+  drawTrace();
+}
+function initTrace(traces){
+  TR = traces; const sel = document.getElementById('traceSel');
+  Object.keys(traces).forEach(k => { const o = document.createElement('option'); o.value = o.textContent = k; sel.appendChild(o); });
+  sel.value = 'attention flash, 2-tile ILP' in traces ? 'attention flash, 2-tile ILP' : Object.keys(traces)[0];
+  sel.onchange = () => selectTrace(sel.value);
+  document.getElementById('legend').innerHTML = Object.keys(ENG).map(e=>`<span><i style="background:${color(e)}"></i>${e}</span>`).join('');
+  const cv = document.getElementById('trace'); let drag = null;
+  const tAt = x => { const left = Math.min(110, cv.clientWidth*0.2); return view[0] + (x-left)/(cv.clientWidth-left-16)*(view[1]-view[0]); };
+  cv.addEventListener('mousedown', ev => { drag = ev.offsetX; });
+  cv.addEventListener('mouseup', ev => { if (drag !== null && Math.abs(ev.offsetX-drag) > 6){
+      const a = tAt(Math.min(drag, ev.offsetX)), b = tAt(Math.max(drag, ev.offsetX)); view = [Math.max(0,a), b]; drawTrace(); }
+    drag = null; });
+  cv.addEventListener('dblclick', () => selectTrace(sel.value));
+  cv.addEventListener('mousemove', ev => {
+    const hit = (cur && cur._hits || []).find(([x,y,w,h]) => ev.offsetX>=x && ev.offsetX<=x+w && ev.offsetY>=y && ev.offsetY<=y+h);
+    if (!hit) return hideTip(); const e = hit[4];
+    showTip(ev.clientX, ev.clientY, `<span class="mono">${esc(e.op)}</span> on ${esc(e.lane)}<br>${fmtUs(e.t0)} to ${fmtUs(e.t1)}`
+      + (e.bytes ? `<br>${fmtB(e.bytes)} moved` : '') + (e.flops ? `<br>${(e.flops/1e6).toFixed(1)} MFLOP` : ''));
+  });
+  cv.addEventListener('mouseleave', hideTip);
+  addEventListener('resize', drawTrace);
+  selectTrace(sel.value);
+}
+
+/* ---------- ladder ---------- */
+function ladder(at){
+  const L = at.ladder, maxT = Math.max(...L.map(s=>s.modeled_latency_us)), maxB = Math.max(...L.map(s=>s.hbm_bytes));
+  const [H,S,d] = at.shape; const first = L[0], last = L[L.length-1];
+  document.getElementById('ladderIntro').textContent =
+    `${H} heads, ${S} tokens, head dim ${d}, bf16. Each step changes one thing and the output stays within bf16 rounding of PyTorch. `
+    + `End to end: ${(first.modeled_latency_us/last.modeled_latency_us).toFixed(1)}x lower modeled latency and `
+    + `${(first.hbm_bytes/last.hbm_bytes).toFixed(0)}x less HBM traffic.`;
+  const notes = ['Writes the S×S score and probability matrices to HBM, then reads them back.',
+    'Online softmax keeps running max, sum and output in SBUF; key tiles above the diagonal are skipped.',
+    'Each head’s K and V are loaded once and reused by every query tile. Traffic drops, latency barely moves: the trace shows the Vector Engine, not DMA, is now the limit.',
+    'Vector Engine was the bottleneck on tiny [128,1] ops; fused them and moved PSUM copies to Scalar.',
+    'Interleaves two independent query tiles so engines overlap.'];
+  document.getElementById('ladderList').innerHTML = L.map((s,i)=>`
+    <li><span class="n">${i+1}</span>
+      <div class="name">${esc(s.kernel)}<small>${notes[i]||''}</small></div>
+      <div class="bars">
+        <div class="bar"><span>Latency</span><div class="track"><div class="fill" style="width:${s.modeled_latency_us/maxT*100}%;background:var(--tensor)"></div></div><span class="v">${fmtUs(s.modeled_latency_us)}</span></div>
+        <div class="bar"><span>HBM bytes</span><div class="track"><div class="fill" style="width:${Math.max(.5,s.hbm_bytes/maxB*100)}%;background:var(--dma)"></div></div><span class="v">${fmtB(s.hbm_bytes)}</span></div>
+      </div></li>`).join('');
+}
+
+/* ---------- log-log line chart ---------- */
+function scalingChart(rows){
+  const el = document.getElementById('scaling'), W = 480, H = 300, m = {l:56,r:16,t:12,b:40};
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',role:'img','aria-label':'HBM bytes against sequence length'}, el);
+  const xs = [...new Set(rows.map(r=>r.S))], ys = rows.map(r=>r.hbm_bytes);
+  const lx = v => Math.log10(v), [x0,x1] = [lx(Math.min(...xs)), lx(Math.max(...xs))];
+  const [y0,y1] = [Math.floor(lx(Math.min(...ys))), Math.ceil(lx(Math.max(...ys)))];
+  const X = v => m.l + (lx(v)-x0)/(x1-x0)*(W-m.l-m.r), Y = v => H-m.b - (lx(v)-y0)/(y1-y0)*(H-m.t-m.b);
+  for (let e=y0;e<=y1;e++){ svgEl('line',{x1:m.l,x2:W-m.r,y1:Y(10**e),y2:Y(10**e),stroke:'#D5DCE3'},svg);
+    svgEl('text',{x:m.l-6,y:Y(10**e)+4,'text-anchor':'end'},svg).textContent = fmtB(10**e); }
+  xs.forEach(v => { svgEl('text',{x:X(v),y:H-m.b+18,'text-anchor':'middle'},svg).textContent = v; });
+  svgEl('text',{x:(W+m.l)/2,y:H-6,'text-anchor':'middle'},svg).textContent = 'sequence length';
+  [['naive','--gpsimd'],['flash','--vector']].forEach(([v,c])=>{
+    const pts = rows.filter(r=>r.variant===v).sort((a,b)=>a.S-b.S);
+    svgEl('polyline',{points:pts.map(p=>`${X(p.S)},${Y(p.hbm_bytes)}`).join(' '),fill:'none',stroke:css(c),'stroke-width':2.5},svg);
+    pts.forEach(p=>svgEl('circle',{cx:X(p.S),cy:Y(p.hbm_bytes),r:4,fill:css(c)},svg));
+    const lp = pts[pts.length-1]; const t = svgEl('text',{x:X(lp.S)-6,y:Y(lp.hbm_bytes)-10,'text-anchor':'end'},svg);
+    t.textContent = v === 'naive' ? 'naive' : 'flash'; t.style.fill = css(c); t.style.fontWeight = 700;
+  });
+}
+
+function rooflineChart(data){
+  const el = document.getElementById('roofline'), W = 480, H = 300, m = {l:56,r:16,t:12,b:40};
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`,width:'100%',role:'img','aria-label':'Roofline chart'}, el);
+  const hw = data.hardware_model, peak = hw.peak_flops.bfloat16, bw = hw.hbm_bytes_per_s;
+  const pts = [...data.matmul.variants.map(s=>({n:s.kernel,ai:s.arithmetic_intensity,tf:s.modeled_tflops,e:'Tensor'})),
+    ...data.attention.ladder.map(s=>({n:'attention: '+s.kernel,ai:s.arithmetic_intensity,tf:s.modeled_tflops,e:'GpSimd'}))];
+  const ax0=0, ax1=4, ay0=0, ay1=Math.ceil(Math.log10(peak/1e12))+0.3;
+  const X = v => m.l + (Math.log10(v)-ax0)/(ax1-ax0)*(W-m.l-m.r), Y = v => H-m.b - (Math.log10(v)-ay0)/(ay1-ay0)*(H-m.t-m.b);
+  for (let e=ay0;e<=Math.floor(ay1);e++){ svgEl('line',{x1:m.l,x2:W-m.r,y1:Y(10**e),y2:Y(10**e),stroke:'#D5DCE3'},svg);
+    svgEl('text',{x:m.l-6,y:Y(10**e)+4,'text-anchor':'end'},svg).textContent = (10**e)+' TF'; }
+  for (let e=ax0;e<=ax1;e+=2) svgEl('text',{x:X(10**e),y:H-m.b+18,'text-anchor':'middle'},svg).textContent = 10**e;
+  svgEl('text',{x:(W+m.l)/2,y:H-6,'text-anchor':'middle'},svg).textContent = 'FLOPs per HBM byte';
+  const ridge = peak/bw, roof = [];
+  for (let e=ax0;e<=ax1;e+=0.05){ const a = 10**e; roof.push(`${X(a)},${Y(Math.min(peak, a*bw)/1e12)}`); }
+  svgEl('polyline',{points:roof.join(' '),fill:'none',stroke:css('--ink'),'stroke-width':2},svg);
+  svgEl('text',{x:W-m.r,y:Y(peak/1e12)-8,'text-anchor':'end'},svg).textContent = `${(peak/1e12).toFixed(0)} TFLOPS bf16 peak`;
+  const st = svgEl('text',{x:X(4)+4,y:Y(4*bw/1e12)-14,transform:`rotate(-45 ${X(4)+4} ${Y(4*bw/1e12)-14})`},svg); st.textContent = `${(bw/1e9).toFixed(0)} GB/s HBM`;
+  pts.forEach(p=>{ if(!p.ai) return; const c = svgEl('circle',{cx:X(p.ai),cy:Y(p.tf),r:6,fill:color(p.e),'fill-opacity':.85,stroke:'#fff',tabindex:0},svg);
+    const h = ev => showTip(ev.clientX, ev.clientY, `${esc(p.n)}<br>${p.ai.toFixed(1)} FLOP/B, ${p.tf.toFixed(1)} TFLOPS modeled`);
+    c.addEventListener('mousemove', h); c.addEventListener('mouseleave', hideTip);
+    c.addEventListener('focus', ()=>{ const r=c.getBoundingClientRect(); showTip(r.right, r.top, `${esc(p.n)}<br>${p.ai.toFixed(1)} FLOP/B, ${p.tf.toFixed(1)} TFLOPS modeled`); });
+    c.addEventListener('blur', hideTip); });
+}
+
+function kernTable(data){
+  const rows = [...data.matmul.variants.map(s=>[s, `${data.matmul.shape.join('×')}`]), ...data.norm.variants.map(s=>[s, data.norm.shape.join('×')])];
+  document.getElementById('kernTable').innerHTML = `<thead><tr><th>Kernel</th><th>Shape</th><th class="num">Instructions</th><th class="num">HBM traffic</th><th class="num">Ideal bound</th><th class="num">Modeled</th><th class="num">Peak SBUF / partition</th></tr></thead><tbody>`
+    + rows.map(([s,sh])=>`<tr><td>${esc(s.kernel)}</td><td>${sh}</td><td class="num">${s.instructions}</td><td class="num">${fmtB(s.hbm_bytes)}</td><td class="num">${fmtUs(s.ideal_bound_us)}</td><td class="num">${fmtUs(s.modeled_latency_us)}</td><td class="num">${(s.peak_sbuf_bytes_per_partition/1024).toFixed(1)} KiB</td></tr>`).join('') + '</tbody>';
+}
+
+function blockChart(b){
+  const tot = b.parts.reduce((a,p)=>a+p.modeled_latency_us,0);
+  document.getElementById('blockIntro').textContent =
+    `RMSNorm, QKV projection, causal flash attention, output projection, RMSNorm and a SwiGLU MLP (d_model ${b.config.d_model}, ${b.config.n_heads} heads, d_ff ${b.config.d_ff}), every heavy op an NKI kernel. On ${b.seq_len} tokens it matches the same block in PyTorch to a max absolute error of ${b.max_abs_err_vs_pytorch.toExponential(1)}.`;
+  document.getElementById('blockCap').textContent = `${b.seq_len} tokens, fp32. Ops run back to back: ${fmtUs(tot)} modeled in total.`;
+  const max = Math.max(...b.parts.map(p=>p.modeled_latency_us));
+  document.getElementById('blockChart').innerHTML = b.parts.map(p=>`<div class="bar" style="grid-template-columns:150px 1fr 80px;margin:6px 0"><span>${esc(p.op)}</span><div class="track"><div class="fill" style="width:${p.modeled_latency_us/max*100}%;background:${p.flops? 'var(--tensor)':'var(--vector)'}"></div></div><span class="v">${fmtUs(p.modeled_latency_us)}</span></div>`).join('');
+}
+
+function corrTable(rows){
+  document.getElementById('corrTable').innerHTML = `<thead><tr><th>Kernel</th><th>Shape</th><th class="num">vs PyTorch</th><th class="num">vs JAX</th></tr></thead><tbody>`
+    + rows.map(r=>`<tr><td>${esc(r.op)}</td><td>${esc(r.shape)}</td><td class="num">${r.vs_torch.toExponential(1)}</td><td class="num">${r.vs_jax.toExponential(1)}</td></tr>`).join('') + '</tbody>';
+}
+
+fetch('data/results.json').then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).then(d=>{
+  initTrace(d.traces); ladder(d.attention); scalingChart(d.attention.scaling); rooflineChart(d);
+  kernTable(d); blockChart(d.decoder_block); corrTable(d.correctness);
+  const v = d.versions;
+  document.getElementById('footer').innerHTML = `Results generated ${esc(d.generated_at)}${d.git_sha? ' from commit <span class="mono">'+esc(d.git_sha)+'</span>':''} with NKI ${esc(v.nki)}, PyTorch ${esc(v.torch)}, JAX ${esc(v.jax)}. Built by <a href="https://github.com/Nags-gk">Nagaraj Gireppa Kanni</a>.`;
+}).catch(err=>{
+  document.getElementById('traceFoot').textContent = `Results file didn't load (${err.message}). Run python bench/run_bench.py to regenerate site/data/results.json, then reload.`;
+});
+</script>
+</body>
+</html>

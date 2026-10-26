@@ -1,0 +1,9 @@
+--extra-index-url https://pip.repos.neuron.amazonaws.com
+--extra-index-url https://download.pytorch.org/whl/cpu
+nki==0.7.0
+numpy>=2.0
+ml_dtypes>=0.5
+torch>=2.5
+jax[cpu]>=0.6
+pytest>=8
+hypothesis>=6
