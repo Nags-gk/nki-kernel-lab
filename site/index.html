@@ -240,7 +240,7 @@ function ladder(at){
   document.getElementById('ladderIntro').textContent =
     `${H} heads, ${S} tokens, head dim ${d}, bf16. Each step changes one thing and the output stays within bf16 rounding of PyTorch. `
     + `End to end: ${(first.modeled_latency_us/last.modeled_latency_us).toFixed(1)}x lower modeled latency and `
-    + `${(first.hbm_bytes/last.hbm_bytes).toFixed(0)}x less HBM traffic.`;
+    + `${Math.floor(first.hbm_bytes/last.hbm_bytes)}x less HBM traffic.`;
   const notes = ['Writes the S×S score and probability matrices to HBM, then reads them back.',
     'Online softmax keeps running max, sum and output in SBUF; key tiles above the diagonal are skipped.',
     'Each head’s K and V are loaded once and reused by every query tile. Traffic drops, latency barely moves: the trace shows the Vector Engine, not DMA, is now the limit.',
